@@ -1,0 +1,20 @@
+{
+  "name": "code-review-ad",
+  "interface": {
+    "displayName": "code-review-ad"
+  },
+  "plugins": [
+    {
+      "name": "code-review-ad",
+      "source": {
+        "source": "local",
+        "path": "./"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Developer Tools"
+    }
+  ]
+}

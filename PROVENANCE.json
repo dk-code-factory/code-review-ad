@@ -1,0 +1,13 @@
+{
+  "organization": "dk-code-factory",
+  "sources": [
+    {
+      "source": "local-skills/code-review-ad",
+      "commit": "57382c9a8cf574e221891b6777d4ea8892956266"
+    },
+    {
+      "source": "automated-development/skills/code-review-ad",
+      "commit": "bc44b034d4b0ced0cc662a3659d6c44cb732c014"
+    }
+  ]
+}

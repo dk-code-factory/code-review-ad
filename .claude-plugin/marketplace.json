@@ -1,0 +1,14 @@
+{
+  "name": "code-review-ad",
+  "owner": {
+    "name": "dk-code-factory"
+  },
+  "plugins": [
+    {
+      "name": "code-review-ad",
+      "source": "./",
+      "description": "code-review-ad",
+      "version": "1.0.0"
+    }
+  ]
+}
