@@ -103,12 +103,11 @@ Do not pass parent hypotheses, other reviewers' findings, or the parent conversa
 
 Each prompt must explicitly forbid edits, formatters, posting, model subprocesses, further
 agents, and Git checkout/switch/reset/stash/worktree. Keep those prohibitions in prompt text,
-not shell commands. Each reviewer has at most six total model-visible read-only tool calls, INCLUDING all
-brief/reference reads, the initial diff scan, and candidate verification. Batch the assigned
-briefs/checks and pinned diff into the first call; spend remaining calls on selected source
-contexts and counterexamples. Preparation is not an extra allowance. Make one systematic pass
+not shell commands. Batch the assigned
+briefs/checks and pinned diff into the first call; use follow-up calls for selected source
+contexts and counterexamples. Make one systematic pass
 over every changed file and relevant metadata without repeating a full scan. Unfinished checks
-are named coverage gaps, not permission to exceed the budget or claim no findings. Do not run
+are named coverage gaps, not grounds to claim no findings. Do not run
 tests, builds, linters, or formatters. Return findings promptly.
 
 For each candidate, return its issue category, exact claim, changed line, source-backed trigger and consequence,
@@ -126,7 +125,7 @@ passes separately and disclose lost independence.
 
 ## 4. Verify and reconcile
 
-After all passes finish, make at most three batched read-only verification commands. Reuse
+After all passes finish, use batched read-only verification commands. Reuse
 agent citations; do not reload the full diff or repeat completed searches. Close named gaps,
 missing required lifecycle rows, numeric audits, and unsupported safety conclusions using
 the relevant check references. A generic checked/safe label is insufficient proof.
