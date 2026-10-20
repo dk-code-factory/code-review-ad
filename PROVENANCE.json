@@ -9,5 +9,19 @@
       "source": "automated-development/skills/code-review-ad",
       "commit": "bc44b034d4b0ced0cc662a3659d6c44cb732c014"
     }
+  ],
+  "ownedChanges": [
+    {
+      "version": "1.0.4",
+      "paths": [
+        "common/reporting.md",
+        "common/inspection.md",
+        "common/codex",
+        "common/claude",
+        "codex/skills/code-review-ad/SKILL.md",
+        "claude/skills/code-review-ad/SKILL.md"
+      ],
+      "description": "Shared evidence criteria, broad inspection, truncation recovery and explicit candidate reconciliation; native host methods retained. Model and reasoning-effort configuration belongs to the host or runner for both skills."
+    }
   ]
 }
