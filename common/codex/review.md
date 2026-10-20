@@ -1,8 +1,11 @@
 # Review procedure
 
-Report verified issues in the proposed change: introduced code defects, concrete factual contradictions in changed documentation or comments, unmet explicit acceptance criteria, and violations of applicable repository rules. A documentation defect needs a source-backed counterexample, not a runtime failure; do not discard it merely because its severity is low or the code executes correctly. For an unmet acceptance criterion, distinguish the existing behavior from what the PR explicitly promises to fix; do not describe an unchanged pre-existing exposure as a newly introduced regression. Apply these definitions when discovering candidates and when the parent filters them. Do not propose fixes, patches, implementation plans, simplifications, or speculative maintenance suggestions. Omit matters of taste and hypothetical future problems without a current counterexample or rule violation.
+Read and apply the [shared reporting criteria](../reporting.md) and
+[inspection and coverage procedure](../inspection.md) in this session and every reviewer.
 
-Use distinct issue categories: runtime defect, test defect, factual documentation defect, repository-rule violation, diagnostic regression, and unmet explicit acceptance criterion. A test defect can exist while the happy path passes: identify the specific wrong production behavior its claimed regression check would still accept, or the assertion/failure/cleanup path that misbehaves. A new test named after a transition must actually stimulate and distinguish that transition. Do not demand unrelated integration coverage merely because a unit fixture uses mocks or manual setup. Acceptance tests may correctly pass at base; distinguish them from a false claim that every test reproduces an old defect.
+Report verified issues in the proposed change: introduced code defects, concrete factual contradictions in changed documentation or comments, unmet explicit acceptance criteria, and violations of applicable repository rules. A documentation defect needs a source-backed counterexample, not a runtime failure; do not discard it merely because its severity is low or the code executes correctly. For an unmet acceptance criterion, distinguish the existing behavior from what the PR explicitly promises to fix; do not describe an unchanged pre-existing exposure as a newly introduced regression. Apply these definitions when discovering candidates and when the parent filters them. Do not propose fixes, patches, implementation plans, simplifications, or generic maintenance suggestions. Supported maintenance risks meet the shared criteria even when currently safe; omit matters of taste and unsupported hypothetical problems.
+
+Use distinct issue categories: runtime defect, test defect, factual documentation defect, repository-rule violation, diagnostic regression, evidenced maintenance risk, and unmet explicit acceptance criterion. A test defect can exist while the happy path passes: identify the specific wrong production behavior its claimed regression check would still accept, or the assertion/failure/cleanup path that misbehaves. A new test named after a transition must actually stimulate and distinguish that transition. Do not demand unrelated integration coverage merely because a unit fixture uses mocks or manual setup. Acceptance tests may correctly pass at base; distinguish them from a false claim that every test reproduces an old defect.
 
 Test-failure safety is its own obligation. A newly added wait without a local failure bound or
 an assertion path bypassing required cleanup can be reported even if the happy path passes.
@@ -86,14 +89,12 @@ reference is not evidence that its checks passed. Verify each applicable asserti
 Launch the three core native Codex agents, named `toolkit`, `standards`, and `spec`, in parallel.
 Launch a fourth, independent Performance subagent only when the user explicitly requests performance review, or both the PR changes a hot path and repository guidance or existing performance tests/benchmarks show that performance matters here. Assess that condition from the frozen diff and repository evidence before launching agents; do not infer it from a generic possibility of slowdown. If launched, name it `performance` and give it the same constraints,
 pins, rules and PR metadata, with only performance-relevant source facts.
-Use the requested review model and default agent role. For GPT-6.1 Sol reviewers, use
-`reasoning_effort: "xhigh"` unless the user explicitly specifies another review effort; for other
-models inherit the parent effort. Start each reviewer with a fresh context
-(`fork_turns: "none"`). Do not use a cheaper exploration role. Give every pass the same frozen
+Start each reviewer with a fresh context (`fork_turns: "none"`). Give every pass the same frozen
 PR description/spec, pins, changed-file list, commit metadata, claim inventory, applicable
 repository/user rules, and exact diff command. Supply absolute paths to this procedure, its
 pass brief, and the selected check references. Do not copy this procedure or the references
-again into the handoff; the agent reads the applicable files together in its first batched read.
+again into the handoff; the agent reads the applicable files in focused instruction reads,
+separate from patch output. Include the shared reporting and inspection paths in every handoff.
 Do not pass parent hypotheses, other reviewers' findings, or the parent conversation.
 
 - Toolkit reads [its brief](passes/toolkit.md).
@@ -103,10 +104,10 @@ Do not pass parent hypotheses, other reviewers' findings, or the parent conversa
 
 Each prompt must explicitly forbid edits, formatters, posting, model subprocesses, further
 agents, and Git checkout/switch/reset/stash/worktree. Keep those prohibitions in prompt text,
-not shell commands. Batch the assigned
-briefs/checks and pinned diff into the first call; use follow-up calls for selected source
-contexts and counterexamples. Make one systematic pass
-over every changed file and relevant metadata without repeating a full scan. Unfinished checks
+not shell commands. Read the assigned briefs/checks separately from the pinned diff.
+Use focused file or hunk reads, checking outer and nested output for omitted or truncated
+ranges and retrieving them before marking coverage complete. Inspect every changed file
+and relevant metadata broadly before deep candidate verification, without repeating a full scan. Unfinished checks
 are named coverage gaps, not grounds to claim no findings. Do not run
 tests, builds, linters, or formatters. Return findings promptly.
 
@@ -133,8 +134,8 @@ the relevant check references. A generic checked/safe label is insufficient proo
 Validate each distinct candidate against the exact contextual assertion and base/head behavior.
 For a claim that an operation cannot complete, trace every relevant producer, finalizer, abort,
 and shutdown path before asserting the absence of an unblocker. For a claimed rule violation,
-verify that the source rule governs the reviewed artifact. Decide report, merge, or reject for
-every candidate; do not silently lose verified issues. Deduplicate only equivalent assertions within the same issue category. A shared counterexample
+verify that the source rule governs the reviewed artifact. Decide report, merge, reject with evidence, or unresolved for
+every candidate in the internal ledger; do not silently lose verified issues. Deduplicate only equivalent assertions within the same issue category. A shared counterexample
 does not turn a false numerical comment, an ineffective regression check, and a runtime defect
 into one obligation. Preserve independently incorrect assertions and their exact locations;
 group repeated versions of the same documentation assertion without inflating the issue count.
