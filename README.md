@@ -1,6 +1,6 @@
 # code-review-ad
 
-Independent MIT plugin for Claude Code and Codex. Version 1.0.1.
+Independent MIT plugin for Claude Code and Codex. Version 1.0.2.
 
 ## Install
 
@@ -56,3 +56,5 @@ Owned source provenance is recorded in `PROVENANCE.json`. No installed system sk
 ## Native review
 
 Invoke `code-review-ad` with a PR number or URL. Review stays in the current host and its native agents; standalone operation requires no DK plugin, Matt Pocock plugin, Qodo, or other review plugin. Git and authenticated `gh` supply pinned PR evidence. The optional Codex inventory helper uses Node.js; inspect Git objects directly when it is unavailable. Claude's native methodology and Codex's native methodology are retained independently under `common/`.
+
+Claude reviews include concrete maintenance risks supported by duplicated code, state coupling, or a specific future failure mode. Directly related pre-existing issues carry explicit scope labels.

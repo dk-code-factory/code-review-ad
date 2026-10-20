@@ -1,6 +1,6 @@
 ---
 name: code-review-ad
-description: Review a pull request with independent toolkit, repository standards, and specification passes; report verified issues without changing code or suggesting fixes.
+description: Review a pull request with Toolkit, repository standards, and specification passes; report verified defects and concrete maintenance risks without changing code or proposing fixes.
 ---
 
 Use Claude Code native agents and tools. `${CLAUDE_PLUGIN_ROOT}` is this plugin root. Do not require Codex for native execution. When shared instructions name a skill with a dollar prefix, use the corresponding Claude native skill in this plugin namespace.
