@@ -22,6 +22,13 @@
         "claude/skills/code-review-ad/SKILL.md"
       ],
       "description": "Shared evidence criteria, broad inspection, truncation recovery and explicit candidate reconciliation; native host methods retained. Model and reasoning-effort configuration belongs to the host or runner for both skills."
+    },
+    {
+      "version": "1.0.5",
+      "paths": [
+        "common/reporting.md"
+      ],
+      "description": "Require simple, direct and concise review language without filler words for both hosts and every native reviewer."
     }
   ]
 }

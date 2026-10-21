@@ -3,6 +3,8 @@
 Both hosts and every native reviewer apply these criteria during discovery and parent
 reconciliation. Retain each host's own passes and verification methods.
 
+Use simple, direct and concise language, no filler words.
+
 | Category | Required evidence |
 | --- | --- |
 | Runtime/security bug | Changed execution path, concrete trigger and consequence, compared with base. |
