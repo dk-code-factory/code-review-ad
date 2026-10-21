@@ -1,6 +1,6 @@
 # code-review-ad
 
-Independent MIT plugin for Claude Code and Codex. Version 1.0.4.
+Independent MIT plugin for Claude Code and Codex. Version 1.0.5.
 
 ## Install
 
@@ -58,5 +58,7 @@ Owned source provenance is recorded in `PROVENANCE.json`. No installed system sk
 Invoke `code-review-ad` with a PR number or URL. Review stays in the current host and its native agents; standalone operation requires no DK plugin, Matt Pocock plugin, Qodo, or other review plugin. Git and authenticated `gh` supply pinned PR evidence. The optional Codex inventory helper uses Node.js; inspect Git objects directly when it is unavailable. Claude's native methodology and Codex's native methodology are retained independently under `common/`.
 
 Both hosts use shared evidence criteria for runtime/security, test/build, diagnostic, documentation, rule, maintenance, and explicit acceptance findings. Reviews include concrete maintenance risks supported by named duplicated sites, state coupling, API obligations, or a supported failure mode. Reviewers inspect changed files broadly before deep verification and keep omitted or truncated evidence visible as coverage gaps. Ordinary reports remain concise; candidate ledgers are available for requested diagnostics. Directly related pre-existing issues carry explicit scope labels.
+
+The experimental Codex path starts native reviewers with factual code-aspect inspection. Its read-only `common/codex/scripts/aspect-driver.py` then asks whether those observations reveal problems and collects cited findings before the existing parent verification. Claude retains its current method.
 
 Model and reasoning-effort settings are controlled by the host or runner. Neither host skill sets reviewer overrides.

@@ -22,6 +22,16 @@
         "claude/skills/code-review-ad/SKILL.md"
       ],
       "description": "Shared evidence criteria, broad inspection, truncation recovery and explicit candidate reconciliation; native host methods retained. Model and reasoning-effort configuration belongs to the host or runner for both skills."
+    },
+    {
+      "version": "1.0.5",
+      "paths": [
+        "common/codex/scripts/aspect-driver.py",
+        "common/codex/review.md",
+        "codex/skills/code-review-ad/SKILL.md",
+        "tests/test_aspect_driver.py"
+      ],
+      "description": "Experimental Codex aspect-first inspection followed by driver-issued assessment and structured finding collection; read-only source validation and existing parent reconciliation retained."
     }
   ]
 }

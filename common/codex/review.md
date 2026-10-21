@@ -89,34 +89,42 @@ reference is not evidence that its checks passed. Verify each applicable asserti
 Launch the three core native Codex agents, named `toolkit`, `standards`, and `spec`, in parallel.
 Launch a fourth, independent Performance subagent only when the user explicitly requests performance review, or both the PR changes a hot path and repository guidance or existing performance tests/benchmarks show that performance matters here. Assess that condition from the frozen diff and repository evidence before launching agents; do not infer it from a generic possibility of slowdown. If launched, name it `performance` and give it the same constraints,
 pins, rules and PR metadata, with only performance-relevant source facts.
-Start each reviewer with a fresh context (`fork_turns: "none"`). Give every pass the same frozen
+Start each reviewer with a fresh context (`fork_turns: "none"`). Give each the same frozen
 PR description/spec, pins, changed-file list, commit metadata, claim inventory, applicable
-repository/user rules, and exact diff command. Supply absolute paths to this procedure, its
-pass brief, and the selected check references. Do not copy this procedure or the references
-again into the handoff; the agent reads the applicable files in focused instruction reads,
-separate from patch output. Include the shared reporting and inspection paths in every handoff.
-Do not pass parent hypotheses, other reviewers' findings, or the parent conversation.
+repository/user rules, and exact diff command. Do not pass parent hypotheses, other agents'
+findings, or the parent conversation.
 
-- Toolkit reads [its brief](passes/toolkit.md).
-- Standards reads [its brief](passes/standards.md).
-- Spec reads [its brief](passes/spec.md).
-- When selected, Performance reads [its brief](passes/performance.md).
+Use the bundled [aspect driver](scripts/aspect-driver.py) in each native agent's own session.
+The initial task is to look at the assigned aspects and describe the implementation. Give the
+agent the driver command and the inspection boundary, without asking it to find bugs or sending
+this review procedure, reporting criteria, pass brief, or check contents in that initial handoff.
+Supply selected check paths as driver arguments for later use. The driver is read-only and
+prints its next instruction as JSON; no scratch or state files are needed.
 
-Each prompt must explicitly forbid edits, formatters, posting, model subprocesses, further
-agents, and Git checkout/switch/reset/stash/worktree. Keep those prohibitions in prompt text,
-not shell commands. Read the assigned briefs/checks separately from the pinned diff.
-Use focused file or hunk reads, checking outer and nested output for omitted or truncated
-ranges and retrieving them before marking coverage complete. Inspect every changed file
-and relevant metadata broadly before deep candidate verification, without repeating a full scan. Unfinished checks
-are named coverage gaps, not grounds to claim no findings. Do not run
-tests, builds, linters, or formatters. Return findings promptly.
+1. Run `python3 PLUGIN_ROOT/common/codex/scripts/aspect-driver.py --phase inspect
+   --pass ROLE --base BASE --head HEAD`, replacing ROLE with `toolkit`, `standards`, `spec`,
+   or the selected `performance` role. Follow the printed aspect prompts and inspect every
+   changed file broadly, then trace the relevant behavior. Record factual observations with
+   pinned file/line citations and explicit gaps. Use focused reads and recover needed truncated
+   ranges. Do not read the pass brief or check contents yet.
+2. In that same agent session, run the driver with `--phase assess`, the same role and pins,
+   `--observations` containing JSON `{summary,evidence:[{path,line,observation}],gaps:[]}`,
+   and one `--check PATH` per selected reference. Quote JSON as literal shell arguments.
+   The driver's output asks whether the observed behavior has any problems. Read its `readNow`
+   and applicable `checks` resources at this point, then follow its assessment instructions.
+   Apply the same substantive checks, evidence criteria, and coverage obligations as before.
+3. Run `--phase collect` with the same role, pins and observations and `--findings` containing
+   the driver's requested finding array (or `[]`). Return the collected findings, required
+   evidence tables and coverage gaps to the parent. The driver validates citations and
+   structure; the parent's existing verification still decides which assertions are supported.
+   If Spec has no meaningful specification, return `No spec available` with source observations
+   and an empty findings array. An unfinished required check remains a coverage gap.
 
-For each candidate, return its issue category, exact claim, changed line, source-backed trigger and consequence,
-base/head distinction, and relevant contrary evidence considered. Include the required state,
-transition, interleaving, and numerical tables from selected checks. Add a compact coverage
-note for each applicable requested check: source evidence plus finding reference, supported
-no-finding conclusion, or unexamined gap. Include test assertions/failure cleanup and commit
-requirements. Unexamined means a gap, never no finding. Do not drop low-severity verified facts.
+Each handoff must explicitly forbid edits, formatters, posting, model subprocesses, further
+agents, and Git checkout/switch/reset/stash/worktree. Do not run tests, builds, or linters.
+Keep those prohibitions in prompt text, not shell commands. The driver requires Python 3.11+
+from the plugin requirements. If it cannot run, disclose the incomplete staged inspection;
+do not silently substitute a direct bug-finding prompt or claim that the protocol completed.
 
 Do not share interim findings or read more source in the parent while reviewers run. Wait
 on their native handles, using a 60000 ms observation timeout where supported so empty polls
