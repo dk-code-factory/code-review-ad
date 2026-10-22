@@ -1,6 +1,6 @@
 # code-review-ad
 
-Independent MIT plugin for Claude Code and Codex. Version 1.0.5.
+Independent MIT plugin for Claude Code and Codex. Version 1.0.6.
 
 ## Install
 
@@ -60,3 +60,5 @@ Invoke `code-review-ad` with a PR number or URL. Review stays in the current hos
 Both hosts use shared evidence criteria for runtime/security, test/build, diagnostic, documentation, rule, maintenance, and explicit acceptance findings. Reviews include concrete maintenance risks supported by named duplicated sites, state coupling, API obligations, or a supported failure mode. Reviewers inspect changed files broadly before deep verification and keep omitted or truncated evidence visible as coverage gaps. Ordinary reports remain concise; candidate ledgers are available for requested diagnostics. Directly related pre-existing issues carry explicit scope labels.
 
 Model and reasoning-effort settings are controlled by the host or runner. Neither host skill sets reviewer overrides.
+
+Codex reviewers find issues immediately, then call the read-only driver once for a role-specific deeper-look prompt before returning findings for parent verification. Both looks use the same native agent session and reuse inspected evidence; there are no intermediate observation or finding-collection payloads. Claude retains its current method.

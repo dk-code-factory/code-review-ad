@@ -29,6 +29,17 @@
         "common/reporting.md"
       ],
       "description": "Require simple, direct and concise review language without filler words for both hosts and every native reviewer."
+    },
+    {
+      "version": "1.0.6",
+      "paths": [
+        "common/codex/scripts/aspect-driver.py",
+        "common/codex/review.md",
+        "common/codex/passes",
+        "codex/skills/code-review-ad/SKILL.md",
+        "tests/test_aspect_driver.py"
+      ],
+      "description": "Codex issue discovery from the first prompt and one role-specific deeper-look driver call in the same session, without intermediate observation or finding-collection payloads; read-only pins and parent verification retained."
     }
   ]
 }

@@ -9,4 +9,6 @@ Model and reasoning-effort settings belong to the host or runner. Do not set rev
 
 Before work, read [the lifecycle procedure](../../../common/lifecycle.md), then run its entry command with `--host codex`. Retain its returned token and follow its structured action. Always run its completion command with that token in a finalization step, including on failure or interruption.
 
+Native reviewers find issues immediately, then use the bundled driver for one role-specific deeper look in the same session before returning supported findings.
+
 Read [the shared procedure](../../../common/codex/procedure.md) and perform the requested workflow. Resolve paths beginning with `PLUGIN_ROOT/` against this plugin's root. Preserve the shared procedure's validation and publication guards.
