@@ -48,10 +48,9 @@
         "scripts/update.py",
         "scripts/check.py",
         "scripts/version.py",
-        "tests",
-        "REVIEW_REPORT.md"
+        "tests"
       ],
-      "description": "Ten separate-agent correctness review passes: hardened frozen Git evidence, updater installation identity and lifecycle failure handling, and release validation; added focused regression coverage and a review report."
+      "description": "Ten separate-agent correctness review passes: hardened frozen Git evidence, updater installation identity and lifecycle failure handling, and release validation; added focused regression coverage."
     }
   ]
 }
