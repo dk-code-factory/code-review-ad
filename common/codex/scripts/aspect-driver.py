@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 """Print one role-specific deeper-look prompt for an ongoing native review."""
 import argparse
-import json
 import re
 import subprocess
 import sys
@@ -26,9 +25,8 @@ def drive(args):
         raise ValueError("checkout HEAD differs from the pinned head")
     if git("merge-base", args.base, args.head) != args.base:
         raise ValueError("base must be the pinned merge-base")
-    return {"schemaVersion": 1, "pass": args.role, "base": args.base, "head": args.head,
-            "question": PROMPTS[args.role],
-            "instruction": "Take this deeper look once in the same session, whether or not you found issues initially. Reuse inspected evidence; make only focused reads for new candidates or unresolved gaps. Preserve earlier supported findings and consider contrary evidence. There is no finding quota; no additional issues is valid. Return findings and coverage gaps to the parent after this follow-up."}
+    return (PROMPTS[args.role] + "\n\n"
+            "Take this deeper look once in the same session, whether or not you found issues initially. Reuse inspected evidence; make only focused reads for new candidates or unresolved gaps. Preserve earlier supported findings and consider contrary evidence. There is no finding quota; no additional issues is valid. Return findings and coverage gaps to the parent after this follow-up.")
 
 
 def main():
@@ -38,7 +36,7 @@ def main():
     parser.add_argument("--head", required=True)
     args = parser.parse_args()
     try:
-        print(json.dumps(drive(args), ensure_ascii=False))
+        print(drive(args))
     except (ValueError, subprocess.CalledProcessError) as exc:
         print(f"aspect-driver: {exc}", file=sys.stderr)
         return 1

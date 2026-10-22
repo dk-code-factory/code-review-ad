@@ -1,5 +1,4 @@
 """Exercise deeper-look prompts against real pinned Git objects."""
-import json
 from pathlib import Path
 import subprocess
 import sys
@@ -33,14 +32,14 @@ def run(repo, role="toolkit"):
                           cwd=directory, capture_output=True, text=True)
 
 
-@pytest.mark.parametrize("role", ["toolkit", "standards", "spec", "performance"])
-def test_returns_role_prompt_without_editing_checkout(repo, role):
-    result = run(repo, role)
-    assert result.returncode == 0, result.stderr
-    value = json.loads(result.stdout)
-    assert value["pass"] == role
-    assert (value["base"], value["head"]) == repo[1:]
-    assert value["question"] and value["instruction"]
+def test_returns_distinct_role_prompts_without_editing_checkout(repo):
+    prompts = []
+    for role in ("toolkit", "standards", "spec", "performance"):
+        result = run(repo, role)
+        assert result.returncode == 0, result.stderr
+        assert result.stdout.strip()
+        prompts.append(result.stdout)
+    assert len(set(prompts)) == len(prompts)
     assert subprocess.check_output(["git", "status", "--porcelain"], cwd=repo[0]) == b""
 
 
