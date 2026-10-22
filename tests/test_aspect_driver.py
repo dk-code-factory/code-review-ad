@@ -1,5 +1,6 @@
 """Exercise deeper-look prompts against real pinned Git objects."""
 from pathlib import Path
+import json
 import subprocess
 import sys
 
@@ -10,10 +11,11 @@ DRIVER = Path(__file__).resolve().parents[1] / "common/codex/scripts/aspect-driv
 
 
 @pytest.fixture
-def repo(tmp_path):
+def repo(tmp_path, request):
     def git(*args):
         return subprocess.check_output(["git", "-C", str(tmp_path), *args], text=True).strip()
-    git("init", "-q")
+    object_format = getattr(request, "param", "sha1")
+    git("init", "-q", f"--object-format={object_format}")
     git("config", "user.email", "test@example.invalid")
     git("config", "user.name", "Test")
     (tmp_path / "code.py").write_text("value = 1\n")
@@ -41,6 +43,21 @@ def test_returns_distinct_role_prompts_without_editing_checkout(repo):
         prompts.append(result.stdout)
     assert len(set(prompts)) == len(prompts)
     assert subprocess.check_output(["git", "status", "--porcelain"], cwd=repo[0]) == b""
+
+
+@pytest.mark.parametrize("repo", ["sha256"], indirect=True)
+def test_accepts_sha256_pins_from_inventory(repo):
+    directory, base, head = repo
+    inventory = subprocess.run(
+        ["node", str(DRIVER.with_name("prepare-review.js")), "--base", base,
+         "--head", head, "--json"],
+        cwd=directory, capture_output=True, text=True, check=True,
+    )
+    pins = json.loads(inventory.stdout)
+    assert len(pins["mergeBase"]) == len(pins["head"]) == 64
+    result = run((directory, pins["mergeBase"], pins["head"]))
+    assert result.returncode == 0, result.stderr
+    assert "Look deeper" in result.stdout
 
 
 @pytest.mark.parametrize("pin", ["HEAD", "abc", "f" * 40])

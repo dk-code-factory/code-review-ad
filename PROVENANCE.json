@@ -40,6 +40,18 @@
         "tests/test_aspect_driver.py"
       ],
       "description": "Codex issue discovery from the first prompt and one role-specific deeper-look driver call in the same session, without intermediate observation or finding-collection payloads; read-only pins and parent verification retained."
+    },
+    {
+      "version": "1.0.7",
+      "paths": [
+        "common/codex/scripts",
+        "scripts/update.py",
+        "scripts/check.py",
+        "scripts/version.py",
+        "tests",
+        "REVIEW_REPORT.md"
+      ],
+      "description": "Ten separate-agent correctness review passes: hardened frozen Git evidence, updater installation identity and lifecycle failure handling, and release validation; added focused regression coverage and a review report."
     }
   ]
 }

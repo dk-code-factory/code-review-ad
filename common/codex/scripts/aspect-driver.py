@@ -19,7 +19,7 @@ def git(*args):
 
 
 def drive(args):
-    if not all(re.fullmatch(r"[a-f0-9]{40}", pin) for pin in (args.base, args.head)):
+    if not all(re.fullmatch(r"(?:[a-f0-9]{40}|[a-f0-9]{64})", pin) for pin in (args.base, args.head)):
         raise ValueError("full base/head OIDs are required")
     if git("rev-parse", "HEAD") != args.head:
         raise ValueError("checkout HEAD differs from the pinned head")

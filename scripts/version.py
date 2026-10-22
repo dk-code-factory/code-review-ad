@@ -3,7 +3,7 @@
 import argparse,json,re
 from pathlib import Path
 p=argparse.ArgumentParser();p.add_argument('version');a=p.parse_args()
-if not re.fullmatch(r'[0-9]+\.[0-9]+\.[0-9]+',a.version):p.error('Use X.Y.Z')
+if not re.fullmatch(r'(?:0|[1-9][0-9]*)\.(?:0|[1-9][0-9]*)\.(?:0|[1-9][0-9]*)',a.version):p.error('Use X.Y.Z without leading zeroes')
 r=Path(__file__).resolve().parent.parent
 for path in [r/'.codex-plugin/plugin.json',r/'.claude-plugin/plugin.json']:
  d=json.loads(path.read_text());d['version']=a.version;path.write_text(json.dumps(d,indent=2)+'\n')

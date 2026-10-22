@@ -5,7 +5,7 @@ from pathlib import Path
 ROOT=Path(__file__).resolve().parent.parent
 
 def version(v):
-    if not re.fullmatch(r"[0-9]+\.[0-9]+\.[0-9]+",v):raise ValueError('Stable semantic version required')
+    if not re.fullmatch(r"(?:0|[1-9][0-9]*)\.(?:0|[1-9][0-9]*)\.(?:0|[1-9][0-9]*)",v):raise ValueError('Stable semantic version required')
     return tuple(map(int,v.split('.')))
 
 def check(base=None):
@@ -28,6 +28,8 @@ def check(base=None):
     for host,filename in [('codex','.agents/plugins/marketplace.json'),('claude','.claude-plugin/marketplace.json')]:
         catalog=json.loads((ROOT/filename).read_text());assert catalog['name']==manifests[0]['name']
         assert [p['name'] for p in catalog['plugins']]==[manifests[0]['name']]
+        if host=='claude':
+            assert catalog['plugins'][0]['version']==manifests[0]['version'],'Claude marketplace version must match host manifests'
     for p in ROOT.rglob('*'):
         if '.git' in p.parts or '__pycache__' in p.parts or '.pytest_cache' in p.parts:continue
         if p.is_symlink():assert p.resolve().is_relative_to(ROOT),str(p)
