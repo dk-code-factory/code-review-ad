@@ -1,6 +1,6 @@
 # code-review-ad
 
-Independent MIT plugin for Claude Code and Codex. Version 1.0.6.
+Independent MIT plugin for Claude Code and Codex. Version 1.0.7.
 
 ## Install
 

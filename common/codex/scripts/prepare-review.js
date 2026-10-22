@@ -54,26 +54,33 @@ function prepareReview({ repo = '.', base, head }) {
     }
   }
   repo = path.resolve(repo)
+  // Git's tree/pathspec commands otherwise interpret root-relative inventory
+  // paths from the caller's subdirectory and silently miss their blob entries.
+  // Remove only Git's terminator: a repository directory may end in whitespace.
+  repo = git(repo, 'rev-parse', '--show-toplevel').replace(/\n$/, '')
   base = git(repo, 'rev-parse', '--verify', `${base}^{commit}`).trim()
   head = git(repo, 'rev-parse', '--verify', `${head}^{commit}`).trim()
   if (git(repo, 'rev-parse', 'HEAD').trim() !== head) throw new Error('checkout HEAD does not match the frozen head')
   const mergeBase = git(repo, 'merge-base', base, head).trim()
   const range = `${mergeBase}...${head}`
-  const files = changedFiles(git(repo, 'diff', '--no-ext-diff', '--no-textconv', '--find-renames', '--name-status', '-z', range))
+  const files = changedFiles(git(repo, 'diff', '--no-ext-diff', '--no-textconv', '--ignore-submodules=none', '--find-renames', '--name-status', '-z', range))
   const comments = [], nearby = [], risks = []
   for (const file of files) {
     if (file.status === 'D') continue
+    // Gitlinks refer to commits in a different object database. Inspect the
+    // tree entry rather than dereferencing their possibly unavailable objects.
+    const entry = git(repo, '--literal-pathspecs', 'ls-tree', '-z', head, '--', file.path)
+    if (!/^[0-7]+ blob /.test(entry)) continue
     // The old pathname may now be a directory containing unrelated new files.
     // Compare renamed blobs directly so its descendants cannot enter this diff.
     const scope = file.oldPath
       ? [`${mergeBase}:${file.oldPath}`, `${head}:${file.path}`]
       : [range, '--', file.path]
     const diff = git(repo, '--literal-pathspecs', 'diff', '--no-ext-diff', '--no-textconv', '--no-color',
-      '--find-renames', '--unified=0', ...scope)
+      '--ignore-submodules=none', '--find-renames', '--unified=0', ...scope)
     const added = addedLines(diff)
-    if (!added.length) continue // Binary files, submodules and pure renames stay in the file list.
+    if (!added.length) continue // Binary files and pure renames stay in the file list.
     const object = `${head}:${file.path}`
-    if (git(repo, 'cat-file', '-t', object).trim() !== 'blob') continue
     const lines = git(repo, 'cat-file', 'blob', object).split('\n')
     const addedNumbers = new Set(added.map((row) => row.line))
     const nearbyNumbers = new Set()
@@ -101,8 +108,8 @@ function prepareReview({ repo = '.', base, head }) {
   const commits = git(repo, 'rev-list', '--reverse', `${mergeBase}..${head}`).trim().split('\n').filter(Boolean).map((oid) => {
     const parent = git(repo, 'show', '-s', '--format=%P', oid).trim().split(' ')[0] || null
     const changed = parent
-      ? git(repo, 'diff', '--no-ext-diff', '--no-textconv', '--name-only', '-z', parent, oid)
-      : git(repo, 'diff-tree', '--root', '--no-commit-id', '--name-only', '-r', '-z', oid)
+      ? git(repo, 'diff', '--no-ext-diff', '--no-textconv', '--ignore-submodules=none', '--name-only', '-z', parent, oid)
+      : git(repo, 'diff-tree', '--ignore-submodules=none', '--root', '--no-commit-id', '--name-only', '-r', '-z', oid)
     return {
       oid, filesComparedWith: parent,
       message: git(repo, 'show', '-s', '--format=%B', oid).trimEnd(),
@@ -112,7 +119,7 @@ function prepareReview({ repo = '.', base, head }) {
   return {
     schemaVersion: 1, base, head, mergeBase,
     workingTreeStatus: git(repo, 'status', '--porcelain=v1'),
-    diffCommand: `git diff --no-ext-diff --no-textconv --find-renames ${range}`,
+    diffCommand: `git diff --no-ext-diff --no-textconv --ignore-submodules=none --find-renames ${range}`,
     files, commits, comments, nearby, risks,
   }
 }
