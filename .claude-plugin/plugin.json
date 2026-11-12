@@ -1,11 +1,12 @@
 {
   "name": "code-review-ad",
-  "version": "1.0.7",
+  "version": "1.1.0",
   "description": "Independent Toolkit, Standards, Spec, and conditional Performance review.",
   "author": {
     "name": "Dmitry Kropachev"
   },
   "license": "MIT",
   "repository": "https://github.com/dk-code-factory/code-review-ad",
-  "skills": "./claude/skills/"
+  "skills": "./claude/skills/",
+  "hooks": "./claude/hooks/hooks.json"
 }
