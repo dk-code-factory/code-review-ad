@@ -51,6 +51,15 @@
         "tests"
       ],
       "description": "Ten separate-agent correctness review passes: hardened frozen Git evidence, updater installation identity and lifecycle failure handling, and release validation; added focused regression coverage."
+    },
+    {
+      "version": "1.1.0",
+      "paths": [
+        "claude/hooks",
+        ".claude-plugin/plugin.json",
+        "tests/test_skill_mention.py"
+      ],
+      "description": "Claude UserPromptSubmit hook that asks the model to invoke the skill when a prompt mentions $code-review-ad."
     }
   ]
 }

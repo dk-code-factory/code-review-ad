@@ -1,6 +1,6 @@
 # code-review-ad
 
-Independent MIT plugin for Claude Code and Codex. Version 1.0.7.
+Independent MIT plugin for Claude Code and Codex. Version 1.1.0.
 
 ## Install
 
@@ -24,7 +24,7 @@ Each repository catalogs only its own plugin. Installing this plugin does not in
 
 - `code-review-ad`
 
-Both manifests select their own native skills directory. Instructions and runtime resources remain inside this plugin. No build step, sibling checkout, submodule, or generated host package is required. Use the host's skill selector with the names above; Claude also exposes `/PLUGIN:SKILL` commands.
+Both manifests select their own native skills directory. Instructions and runtime resources remain inside this plugin. No build step, sibling checkout, submodule, or generated host package is required. Use the host's skill selector with the names above; Claude also exposes `/PLUGIN:SKILL` commands. In Claude Code, a `$code-review-ad` mention anywhere in a prompt (for example `review PR 1234 with $code-review-ad`) triggers a bundled `UserPromptSubmit` hook that tells Claude to invoke the skill; the hook needs Python 3.
 
 ## Requirements
 
